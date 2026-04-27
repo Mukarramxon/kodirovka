@@ -68,12 +68,12 @@ const tocBySection = {
   ],
   'release-management': [
     { id: 'release-overview', label: 'Обзор' },
-    { id: 'release-process', label: 'Релизный процесс' },
-    { id: 'release-versioning', label: 'Версионирование' },
-    { id: 'release-rollback', label: 'Rollback-план' },
     { id: 'release-jira', label: 'Мобильная платформа' },
     { id: 'release-workflow', label: 'Workflow' },
     { id: 'release-fix-version-management', label: 'Управление Releases' },
+    { id: 'release-process', label: 'Релизный процесс' },
+    { id: 'release-versioning', label: 'Версионирование' },
+    { id: 'release-rollback', label: 'Rollback-план' },
   ],
   handoff: [
     { id: 'handoff-overview', label: 'Обзор' },
