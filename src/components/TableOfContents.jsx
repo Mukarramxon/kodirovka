@@ -71,7 +71,7 @@ const tocBySection = {
     { id: 'release-process', label: 'Релизный процесс' },
     { id: 'release-versioning', label: 'Версионирование' },
     { id: 'release-rollback', label: 'Rollback-план' },
-    { id: 'release-jira', label: 'Fix Version в Jira' },
+    { id: 'release-jira', label: 'Мобильная платформа' },
     { id: 'release-workflow', label: 'Workflow' },
     { id: 'release-fix-version-management', label: 'Управление Releases' },
   ],

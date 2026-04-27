@@ -179,10 +179,10 @@ export default function ReleaseManagement() {
         </div>
       </Card>
 
-      {/* Инструкция по релизам в Jira */}
+      {/* Инструкция по релизам в Мобильной платформе (Мобайл команды) */}
       <h3 id="release-jira" className="text-lg font-semibold text-slate-900 mt-10 mb-4 scroll-mt-20 flex items-center gap-2">
         <div className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-        Инструкция по релизам в Jira
+        Инструкция по релизам в Мобильной платформе (Мобайл команды)
       </h3>
 
       <Card className="p-6 mb-8">
