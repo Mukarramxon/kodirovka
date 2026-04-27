@@ -473,6 +473,7 @@ function MetricsSection() {
 /* ─────────────────── 4. ЦЕРЕМОНИИ ─────────────────── */
 
 function CeremoniesSection() {
+  const [activeTab, setActiveTab] = useState('scrum');
   const [expandedCeremony, setExpandedCeremony] = useState(null);
 
   const timeline = [
@@ -561,6 +562,72 @@ function CeremoniesSection() {
     'Product Owner принимает инкремент',
   ];
 
+  const kanbanTimeline = [
+    { freq: 'Ежедневно', event: 'Kanban-митинг', icon: MessageSquare, duration: '15 мин', color: 'bg-emerald-500' },
+    { freq: '1–2 р/нед', event: 'Пополнение бэклога', icon: ClipboardCheck, duration: '30 мин', color: 'bg-blue-500' },
+    { freq: 'Раз в 2 нед', event: 'Обзор доставки', icon: TrendingUp, duration: '1 ч', color: 'bg-violet-500' },
+    { freq: 'Раз в 2 нед', event: 'Обзор рисков', icon: AlertTriangle, duration: '30 мин', color: 'bg-amber-500' },
+    { freq: 'Ежемесячно', event: 'Обзор операций', icon: LayoutGrid, duration: '1 ч', color: 'bg-rose-500' },
+  ];
+
+  const kanbanCadences = [
+    {
+      id: 'ceremonies-kanban-meeting',
+      title: 'Kanban-митинг',
+      icon: MessageSquare,
+      color: 'text-emerald-600 bg-emerald-50',
+      who: 'Все участники потока',
+      timebox: '15 минут ежедневно',
+      purpose: 'Синхронизация по потоку работы. Фокус на доске: какие элементы заблокированы, где нарушены WIP-лимиты, что нужно для продвижения работы. Это не статус-отчёт — это координация для оптимизации потока.',
+      inputs: ['Kanban-доска (текущее состояние)', 'WIP-лимиты и их нарушения', 'Блокеры и зависимости'],
+      outputs: ['План разблокировки задач', 'Обновлённые приоритеты', 'Действия по улучшению потока'],
+    },
+    {
+      id: 'ceremonies-kanban-replenishment',
+      title: 'Пополнение бэклога (Replenishment)',
+      icon: ClipboardCheck,
+      color: 'text-blue-600 bg-blue-50',
+      who: 'Product Owner + команда',
+      timebox: '30 минут, 1–2 раза в неделю',
+      purpose: 'Принятие решений о том, какие элементы вытянуть в колонку «Готово к работе». Приоритизация на основе ценности, срочности и класса обслуживания.',
+      inputs: ['Бэклог с приоритетами', 'Текущая загрузка доски', 'Классы обслуживания'],
+      outputs: ['Пополненная колонка «Готово»', 'Обновлённые приоритеты бэклога', 'Согласованные ожидания по срокам'],
+    },
+    {
+      id: 'ceremonies-kanban-delivery',
+      title: 'Обзор доставки сервиса',
+      icon: TrendingUp,
+      color: 'text-violet-600 bg-violet-50',
+      who: 'Команда + стейкхолдеры',
+      timebox: '1 час, раз в 2 недели',
+      purpose: 'Анализ метрик потока: Cycle Time, пропускная способность (throughput), распределение по классам обслуживания. Принятие решений по улучшению предсказуемости доставки.',
+      inputs: ['Данные по Cycle Time и throughput', 'CFD (Cumulative Flow Diagram)', 'SLA/SLE по классам обслуживания'],
+      outputs: ['Выявленные узкие места', 'Корректировка WIP-лимитов', 'Обновлённые SLE (Service Level Expectation)'],
+    },
+    {
+      id: 'ceremonies-kanban-risk',
+      title: 'Обзор рисков',
+      icon: AlertTriangle,
+      color: 'text-amber-600 bg-amber-50',
+      who: 'Команда',
+      timebox: '30 минут, раз в 2 недели',
+      purpose: 'Идентификация и управление рисками, которые могут повлиять на поток доставки. Обзор заблокированных и «застрявших» элементов, зависимостей и потенциальных проблем.',
+      inputs: ['Элементы, превышающие SLE', 'Заблокированные задачи', 'Внешние зависимости'],
+      outputs: ['План митигации рисков', 'Эскалации при необходимости', 'Обновлённая доска рисков'],
+    },
+    {
+      id: 'ceremonies-kanban-operations',
+      title: 'Обзор операций',
+      icon: LayoutGrid,
+      color: 'text-rose-600 bg-rose-50',
+      who: 'Руководители команд / менеджмент',
+      timebox: '1 час, ежемесячно',
+      purpose: 'Кросс-командная координация и обзор общей эффективности системы. Обсуждение зависимостей между командами, общих ресурсов и системных улучшений.',
+      inputs: ['Метрики доставки всех команд', 'Межкомандные зависимости', 'Стратегические приоритеты'],
+      outputs: ['Решения по межкомандным блокерам', 'Перераспределение ресурсов', 'Системные улучшения процесса'],
+    },
+  ];
+
   const toggleCeremony = (id) => setExpandedCeremony(expandedCeremony === id ? null : id);
 
   return (
@@ -568,10 +635,28 @@ function CeremoniesSection() {
       <SectionHeader
         icon={Users}
         title="Церемонии"
-        subtitle="Scrum-церемонии (события) создают ритм инспекции и адаптации. У каждого события есть чёткая цель, таймбокс и ожидаемые результаты."
+        subtitle="Церемонии и каденции создают ритм инспекции и адаптации. Scrum использует фиксированные события, Kanban — гибкие каденции для управления потоком."
         id="ceremonies-overview"
       />
 
+      <div className="flex gap-2 mb-6">
+        {['scrum', 'kanban'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => { setActiveTab(tab); setExpandedCeremony(null); }}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === tab
+                ? 'bg-primary-600 text-white shadow-md shadow-primary-600/20'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            {tab === 'scrum' ? 'Scrum' : 'Kanban'}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'scrum' && (
+      <>
       <SubHeader id="ceremonies-timeline" title="Таймлайн церемоний" />
       <Card className="p-6 mb-8">
         <div className="relative">
@@ -693,6 +778,145 @@ function CeremoniesSection() {
           </ul>
         </Card>
       </div>
+      </>
+      )}
+
+      {activeTab === 'kanban' && (
+      <>
+        <SubHeader id="ceremonies-kanban-cadences" title="Каденции Kanban" />
+        <Card className="p-6 mb-8">
+          <div className="relative">
+            <div className="absolute left-[18px] top-4 bottom-4 w-0.5 bg-slate-200" />
+            <div className="space-y-6">
+              {kanbanTimeline.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div key={idx} className="flex items-center gap-4 relative">
+                    <div className={`w-9 h-9 rounded-full ${item.color} flex items-center justify-center flex-shrink-0 z-10`}>
+                      <Icon className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1 flex items-center justify-between bg-slate-50 rounded-lg px-4 py-3 border border-slate-100">
+                      <div>
+                        <p className="text-sm font-medium text-slate-900">{item.event}</p>
+                        <p className="text-xs text-slate-500">{item.freq}</p>
+                      </div>
+                      <Badge>{item.duration}</Badge>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Card>
+
+        <div className="space-y-3">
+          {kanbanCadences.map((c) => {
+            const Icon = c.icon;
+            const isOpen = expandedCeremony === c.id;
+            return (
+              <Card key={c.id} className="overflow-hidden">
+                <button
+                  id={c.id}
+                  onClick={() => toggleCeremony(c.id)}
+                  className="w-full flex items-center justify-between px-5 py-4 text-left scroll-mt-20 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${c.color}`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 text-sm">{c.title}</h4>
+                      <p className="text-xs text-slate-500">{c.timebox}</p>
+                    </div>
+                  </div>
+                  {isOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                {isOpen && (
+                  <div className="px-5 pb-5 border-t border-slate-100 pt-4">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-sm text-slate-600 leading-relaxed mb-4">{c.purpose}</p>
+                        <p className="text-xs font-medium text-slate-500 mb-1">Кто участвует</p>
+                        <p className="text-sm text-slate-700 mb-3">{c.who}</p>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Входы</p>
+                          {c.inputs.map((input) => (
+                            <div key={input} className="flex items-start gap-2 mb-1">
+                              <ArrowRight className="w-3 h-3 text-primary-500 mt-1 flex-shrink-0" />
+                              <span className="text-xs text-slate-600">{input}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Выходы</p>
+                          {c.outputs.map((output) => (
+                            <div key={output} className="flex items-start gap-2 mb-1">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-500 mt-1 flex-shrink-0" />
+                              <span className="text-xs text-slate-600">{output}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </Card>
+            );
+          })}
+        </div>
+
+        <SubHeader id="ceremonies-kanban-practices" title="Ключевые практики Kanban" />
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card className="p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Filter className="w-5 h-5 text-blue-600" />
+              <h4 className="font-semibold text-slate-900">WIP-лимиты</h4>
+            </div>
+            <p className="text-xs text-slate-500 mb-3">Ограничение незавершённой работы — основа Kanban:</p>
+            <ul className="space-y-2">
+              {[
+                'Установите WIP-лимит для каждой колонки на доске',
+                'Начните с формулы: количество людей × 1.5',
+                'Нарушение WIP — сигнал помочь разблокировать',
+                'Регулярно пересматривайте лимиты по метрикам',
+                'Низкий WIP = быстрый поток, высокий WIP = задержки',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <div className="w-5 h-5 rounded border-2 border-blue-300 bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" />
+                  </div>
+                  <span className="text-sm text-slate-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+          <Card className="p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Zap className="w-5 h-5 text-amber-600" />
+              <h4 className="font-semibold text-slate-900">Классы обслуживания</h4>
+            </div>
+            <p className="text-xs text-slate-500 mb-3">Приоритизация по типу запроса:</p>
+            <div className="space-y-3">
+              {[
+                { cls: 'Expedite', color: 'bg-red-100 text-red-700', rule: 'Критический инцидент. Нарушает WIP. Один в системе.' },
+                { cls: 'Fixed Date', color: 'bg-amber-100 text-amber-700', rule: 'Жёсткий дедлайн. Планируется заранее с буфером.' },
+                { cls: 'Standard', color: 'bg-blue-100 text-blue-700', rule: 'Обычная работа. Обрабатывается в порядке FIFO.' },
+                { cls: 'Intangible', color: 'bg-slate-100 text-slate-700', rule: 'Техдолг, улучшения. Выделяйте ~20% ёмкости.' },
+              ].map((item) => (
+                <div key={item.cls} className="flex items-center gap-3">
+                  <span className={`inline-flex items-center justify-center w-24 h-7 rounded-md text-xs font-bold ${item.color}`}>
+                    {item.cls}
+                  </span>
+                  <span className="text-sm text-slate-700">{item.rule}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      </>
+      )}
     </section>
   );
 }

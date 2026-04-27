@@ -28,13 +28,10 @@ const tocBySection = {
   ],
   ceremonies: [
     { id: 'ceremonies-overview', label: 'Обзор' },
-    { id: 'ceremonies-timeline', label: 'Таймлайн церемоний' },
-    { id: 'ceremonies-planning', label: 'Планирование спринта' },
-    { id: 'ceremonies-standup', label: 'Дейли-стендап' },
-    { id: 'ceremonies-refinement', label: 'Уточнение (PBR)' },
-    { id: 'ceremonies-review', label: 'Обзор спринта' },
-    { id: 'ceremonies-retro', label: 'Ретроспектива' },
+    { id: 'ceremonies-timeline', label: 'Scrum-события' },
     { id: 'ceremonies-dor-dod', label: 'DoR и DoD' },
+    { id: 'ceremonies-kanban-cadences', label: 'Kanban-каденции' },
+    { id: 'ceremonies-kanban-practices', label: 'Практики Kanban' },
   ],
   tools: [
     { id: 'tools-overview', label: 'Обзор' },
