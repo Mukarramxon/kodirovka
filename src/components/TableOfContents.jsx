@@ -59,9 +59,11 @@ const tocBySection = {
   ],
   architecture: [
     { id: 'architecture-overview', label: 'Обзор' },
-    { id: 'architecture-arm', label: 'Процесс ARM' },
-    { id: 'architecture-replication', label: 'Репликация данных' },
     { id: 'architecture-principles', label: 'Принципы' },
+    { id: 'architecture-arm', label: 'Типы задач' },
+    { id: 'architecture-dor', label: 'Definition of Ready' },
+    { id: 'architecture-dod', label: 'Definition of Done' },
+    { id: 'architecture-kanban', label: 'Канбан-доска' },
   ],
   'release-management': [
     { id: 'release-overview', label: 'Обзор' },

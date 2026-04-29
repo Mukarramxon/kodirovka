@@ -52,7 +52,7 @@ const navGroups = [
     items: [
       { id: 'environments', label: 'Среды', icon: Server, sub: 'Local → Dev → Staging → Prod' },
       { id: 'code-standards', label: 'Стандарты кода', icon: FileCode, sub: 'Cursor, PR, документация' },
-      { id: 'architecture', label: 'Архитектура', icon: Layers, sub: 'ARM, сервисы, репликация' },
+      { id: 'architecture', label: 'Архитектура', icon: Layers, sub: 'Комитет, DoR, DoD, канбан' },
       { id: 'release-management', label: 'Релиз-менеджмент', icon: PackageCheck, sub: 'Деплой и версионирование' },
     ],
   },
